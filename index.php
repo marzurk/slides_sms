@@ -74,9 +74,37 @@
 						    exit();
 						}
 
+						$now = (new \Datetime())->format('Y-m-d');
 						//Select results from all days
-						if ($resultado = mysqli_query($con, "SELECT * FROM medicion")) {
-							
+						if ($resultado = mysqli_query($con, "SELECT * FROM medicion WHERE fecha like '".$now." %'")) {
+							$rawdata = array();
+					        //save in an array the result of the query
+					        $i=0;
+					        while($row = mysqli_fetch_array($resultado))
+					        {  
+					            $rawdata[$i] = $row;
+					            $i++;
+					        }
+					        echo $resultado->num_rows;
+
+					        //Convert time to phpTime
+							$voltajeA;
+							$tempA;
+							$humedadA;
+							$timeArray;
+							for($i = 0 ;$i<count($rawdata);$i++){
+							    $voltajeA[$i]= $rawdata[$i][1];
+							    $humedadA[$i]= $rawdata[$i][2];
+							    $tempA[$i]= $rawdata[$i][3];
+							    //OBTENEMOS EL TIMESTAMP
+							    $time = $rawdata[$i][4];
+							    $date = new DateTime($time);
+							    //ALMACENAMOS EL TIMESTAMP EN EL ARRAY
+							    $timeArray[$i] = $date->format('H:i:s');
+							    echo "<p>".$timeArray[$i]."</p>";
+							}
+
+							echo "</table>";
 						    /* liberar el conjunto de resultados */
 						    mysqli_free_result($resultado);
 						}
@@ -89,6 +117,9 @@
 						}
 					 ?>
 					 <h3>El numero de resultados es: <?php $numResul ?> </h3>
+					 <div id="contenedor">
+					 	
+					 </div>
 				</section>
 				<section>
 					<a href="http://bit.ly/1gVATKM">Datos sobre radiación solar en Teapa, Tabasco - NASA</a>
@@ -162,6 +193,52 @@
 	<script type="text/javascript" src="jquery.js"></script>
 	<script src="lib/js/head.min.js"></script>
 	<script src="js/reveal.js"></script>
+	<script src="js/highstock.js"></script>
+	<script src="js/exporting.js"></script>
+	<script type="text/javascript">
+		chartCPU = new Highcharts.StockChart({
+		    chart: {
+		        renderTo: 'contenedor'
+		        //defaultSeriesType: 'spline'
+		 
+		    },
+		    rangeSelector : {
+		        enabled: false
+		    },
+		    title: {
+		        text: 'Gráfica'
+		    },
+		    xAxis: {
+		        type: 'datetime'
+		        //tickPixelInterval: 150,
+		        //maxZoom: 20 * 1000
+		    },
+		    yAxis: {
+		        minPadding: 0.2,
+		        maxPadding: 0.2,
+		        title: {
+		            text: 'Valores',
+		            margin: 10
+		        }
+		    },
+		    series: [{
+		        name: 'valor',
+		        data: (function() {
+		                // generate an array of random data
+		                var data = [];
+		                <?php
+		                    for($i = 0 ;$i<count($rawdata);$i++){
+		                ?>
+		                data.push([<?php echo $timeArray[$i];?>,<?php echo $valoresArray[$i];?>]);
+		                <?php } ?>
+		                return data;
+		            })()
+		    }],
+		    credits: {
+		            enabled: false
+		    }
+		});
+ 	</script>
 	<script>
 		//Required, even if empty
 		Reveal.initialize({
