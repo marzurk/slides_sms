@@ -1,3 +1,41 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?xxu1re');
+	src:url('../fonts/icomoon.eot?xxu1re#iefix') format('embedded-opentype'),
+		url('../fonts/icomoon.ttf?xxu1re') format('truetype'),
+		url('../fonts/icomoon.woff?xxu1re') format('woff'),
+		url('../fonts/icomoon.svg?xxu1re#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+.btnTabs{
+	display: inline-block; 
+	list-style: none;
+}
+	.btnTabs a{
+		background-color: #FFFFFF;
+		border: 2px solid #fff;
+		display:inline-block;
+		font-size: 2.5em;
+		padding: 20%;
+		text-decoration:none;
+	}
+		.btnTabs a:hover{
+			background-color: #00B6DF;
+			color:#FFFFFF;	
+		}
+.container{
+	max-height: 20%;
+	max-width: 100%;
+}
+#chart{
+	background-color: white;
+	height: 100%;
+	width: 100%;
+}
+#tabla{
+	display: none;
+}
 .sombra{
 	text-shadow: 2px 2px #444;
 }

@@ -4,14 +4,18 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Sun Metric Station - By Proyecto Tesalia</title>
+	<title>Solar Metric Station - By Proyecto Tesalia</title>
 	<link rel="stylesheet" href="css/reveal.css">
 	<link rel="stylesheet" href="css/theme/black.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.css">
 	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="style.css">
 	<!--Add support for earlier versions of Internet Explorer-->
 	<!--[if IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 	<![endif]-->
+	<script src="js/chart.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
 </head>
 
 <body>
@@ -21,9 +25,9 @@
 			<!-- ALL SLIDES GO HERE -->
 			<!--  Each section elemente contains an individual slide -->
 			<section>
-				<h1>Sun Metric Station</h1>
+				<h1>Solar Metric Station</h1>
 				<img src="img/solar-energy.jpg" style="max-width:50%;">
-				<p><a href="http://fb.com/ProyectoTesalia" target="_blank">Proyecto Tesalia</a></p>
+				<p><a href="http://fb.com/ProyectoTesalia" target="_blank">Proyecto Tesalia</a> - ITSS</p>
 			</section>
 			<section>
 				<section id="abstract" data-background="img/photovoltaic.png" data-background-size="100%">
@@ -58,72 +62,62 @@
 					</p>
 				</section>
 				<section>
-					<p>SOMETHING :)</p>
-					<?php
-						$server = "192.168.10.38";
-						$username = "tesalia";
-						$password = "proyecto";
-						$dbname = "solar_metric";
+					<nav>
+						<ul>
+							<li class="btnTabs">
+								<a id="enlaceTabla">
+									&nbsp;<span class="icon-stats-dots" style="font-family:'icomoon';"></span>&nbsp;
+								</a>
+							</li>&nbsp;&nbsp;
+							<li class="btnTabs">
+								<a id="enlaceGrafo">
+									&nbsp;<span class="icon-table" style="font-family:'icomoon';"></span>&nbsp;
+								</a>
+							</li>
+						</ul>
+					</nav>
+					<div id="tabla">
+						<h4 style="color:#1ACEE3;">Datos Obtenidos</h4>
+						<?php 
 
-						//Create connection
-						$con = mysqli_connect($server, $username, $password, $dbname);
+						    $conexion=mysql_connect('localhost', 'root', '');
+						    //$conexion = mysql_connect('192.168.43.246', 'tesalia', 'proyecto');
+						    mysql_select_db('solar_metric');
+							$now = (new \Datetime())->format('Y-m-d');
+							echo $now;
+							$consulta= "SELECT voltaje, temp, humedad, hora FROM medicion WHERE fecha = '" .$now."'";
+							$resultado=mysql_query($consulta, $conexion);
 
-						/* verificar la conexión */
-						if (mysqli_connect_errno()) {
-						    printf("Conexión fallida: %s\n", mysqli_connect_error());
-						    exit();
-						}
+							echo '<table style="border: 2px solid #fff; text-align:center;">';
+							echo '<tr><td>HORA DE MEDICIÓN</td><td>VOLTAJE</td><td>HUMEDAD</td><td>TEMPERATURA</td></tr>';
 
-						$now = (new \Datetime())->format('Y-m-d');
-						//Select results from all days
-						if ($resultado = mysqli_query($con, "SELECT * FROM medicion WHERE fecha like '".$now." %'")) {
-							$rawdata = array();
-					        //save in an array the result of the query
-					        $i=0;
-					        while($row = mysqli_fetch_array($resultado))
-					        {  
-					            $rawdata[$i] = $row;
-					            $i++;
-					        }
-					        echo $resultado->num_rows;
-
-					        //Convert time to phpTime
-							$voltajeA;
-							$tempA;
-							$humedadA;
-							$timeArray;
-							for($i = 0 ;$i<count($rawdata);$i++){
-							    $voltajeA[$i]= $rawdata[$i][1];
-							    $humedadA[$i]= $rawdata[$i][2];
-							    $tempA[$i]= $rawdata[$i][3];
-							    //OBTENEMOS EL TIMESTAMP
-							    $time = $rawdata[$i][4];
-							    $date = new DateTime($time);
-							    //ALMACENAMOS EL TIMESTAMP EN EL ARRAY
-							    $timeArray[$i] = $date->format('H:i:s');
-							    echo "<p>".$timeArray[$i]."</p>";
+							$i=0;
+							while($registro=mysql_fetch_array($resultado)){
+								$voltaje[$i]=$registro["voltaje"];
+								$temp[$i]=$registro["temp"];
+								$humedad[$i]=$registro["humedad"];
+								$hora[$i]=$registro["hora"];
+								echo '<tr>';
+								echo '<td>'.$hora[$i].'</td>';
+								echo '<td>'.$voltaje[$i].'v</td>';
+								echo '<td>'.$humedad[$i].'%</td>';
+								echo '<td>'.$temp[$i].'°C</td>';
+								$i++;
+								echo '</tr>';
 							}
 
-							echo "</table>";
-						    /* liberar el conjunto de resultados */
-						    mysqli_free_result($resultado);
-						}
-
-						//Close Connections
-						$close = mysqli_close($con);
-
-						if(!$close){
-							echo 'Ha sucedido un error inesperado<br>';
-						}
-					 ?>
-					 <h3>El numero de resultados es: <?php $numResul ?> </h3>
-					 <div id="contenedor">
-					 	
+							echo '</table>'
+						 ?>
+						 <span class="icon-undo2" style="font-family:'icomoon';"></span>
+						 <button id="btnRegresar">Regresar</button>
 					 </div>
 				</section>
 				<section>
 					<a href="http://bit.ly/1gVATKM">Datos sobre radiación solar en Teapa, Tabasco - NASA</a>
 					<a href="http://bit.ly/1OXoi7T">Villahermosa - Estadísticas de radiación - NASA</a>
+				</section>
+				<section>
+					<canvas id="chart" width="400" height="400" style="background-color:white;"></canvas>
 				</section>
 			</section>
 			<section>
@@ -163,6 +157,20 @@
 				</section>
 			</section>
 			<section>
+				<section>
+					<h3>Galería</h3>
+				</section>
+				<section data-background="img/1.jpg" data-background-size="90%"></section>
+				<section data-background="img/5.jpg" data-background-size="90%"></section>
+				<section data-background="img/6.jpg" data-background-size="90%"></section>
+				<section data-background="img/7.jpg" data-background-size="90%"></section>
+				<section data-background="img/8.jpg" data-background-size="90%"></section>
+				<section data-background="img/9.jpg" data-background-size="90%"></section>
+				<section data-background="img/10.jpg" data-background-size="90%"></section>
+				<section data-background="img/11.jpg" data-background-size="90%"></section>
+				<section data-background="img/12.jpg" data-background-size="90%"></section>
+			</section>
+			<section>
 				<p>
 					<a href="http://www.conermex.com.mx/informacion-de-interes/los-sistemas-fotovoltaicos.html" title="Sistemas fotovoltaicos - CONERMEX" target="_blank">
 						http://www.conermex.com.mx/informacion-de-interes/los-sistemas-fotovoltaicos.html
@@ -190,55 +198,9 @@
 			</section>
 		</div>
 	</div>
-	<script type="text/javascript" src="jquery.js"></script>
 	<script src="lib/js/head.min.js"></script>
 	<script src="js/reveal.js"></script>
-	<script src="js/highstock.js"></script>
-	<script src="js/exporting.js"></script>
-	<script type="text/javascript">
-		chartCPU = new Highcharts.StockChart({
-		    chart: {
-		        renderTo: 'contenedor'
-		        //defaultSeriesType: 'spline'
-		 
-		    },
-		    rangeSelector : {
-		        enabled: false
-		    },
-		    title: {
-		        text: 'Gráfica'
-		    },
-		    xAxis: {
-		        type: 'datetime'
-		        //tickPixelInterval: 150,
-		        //maxZoom: 20 * 1000
-		    },
-		    yAxis: {
-		        minPadding: 0.2,
-		        maxPadding: 0.2,
-		        title: {
-		            text: 'Valores',
-		            margin: 10
-		        }
-		    },
-		    series: [{
-		        name: 'valor',
-		        data: (function() {
-		                // generate an array of random data
-		                var data = [];
-		                <?php
-		                    for($i = 0 ;$i<count($rawdata);$i++){
-		                ?>
-		                data.push([<?php echo $timeArray[$i];?>,<?php echo $valoresArray[$i];?>]);
-		                <?php } ?>
-		                return data;
-		            })()
-		    }],
-		    credits: {
-		            enabled: false
-		    }
-		});
- 	</script>
+	<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script>
 		//Required, even if empty
 		Reveal.initialize({
