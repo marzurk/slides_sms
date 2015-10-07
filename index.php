@@ -86,7 +86,7 @@
 							$now = (new \Datetime())->format('Y-m-d');
 							echo $now;
 							$consulta= "SELECT voltaje, temp, humedad, hora FROM medicion WHERE fecha = '" .$now. "' ORDER BY hora DESC LIMIT 3";
-							
+
 							$resultado=mysql_query($consulta, $conexion);
 
 							echo '<table style="border: 2px solid #fff; text-align:center;">';
@@ -209,7 +209,7 @@
 			overview: true,
 			center: true,
 			touch: true,
-			loop: false,
+			loop: true,
 			mouseWheel: true,
 			transition: 'slide'
 		});
