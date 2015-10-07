@@ -8,6 +8,14 @@
 	font-weight: normal;
 	font-style: normal;
 }
+#btnRegresar{
+	font-size: 2em;
+	color: white;
+}
+	#btnRegresar:hover{
+		font-size: 2.5em;
+		color:#15A0E4;
+	}
 .btnTabs{
 	display: inline-block; 
 	list-style: none;

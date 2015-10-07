@@ -51,7 +51,7 @@
 			</section>
 			<section>
 				<section data-background="img/solar-panel.png">
-					<h2>¿Qué es SMS - Sun Metric Station?</h2>
+					<h2>¿Qué es SMS - Solar Metric Station?</h2>
 					<ul class="sombra">
 						<li>
 						Es un Sistema de Medición Solar automático que permite monitorear y registrar los valores correspondientes a la energía eléctrica (en Volts) producida por el mismo.
@@ -59,10 +59,10 @@
 						<li>
 							Es un sistema automático que busca orientarse paralelamente al sol, con la finalidad de recibir la incidencia solar de manera directa y maximizar el porcentaje de aprovechamiento de la radiación solar emitida.
 						</li>
-					</p>
+					</ul>
 				</section>
 				<section>
-					<nav>
+					<nav id="menuTabs">
 						<ul>
 							<li class="btnTabs">
 								<a id="enlaceTabla">
@@ -78,14 +78,15 @@
 					</nav>
 					<div id="tabla">
 						<h4 style="color:#1ACEE3;">Datos Obtenidos</h4>
+						
 						<?php 
-
 						    $conexion=mysql_connect('localhost', 'root', '');
 						    //$conexion = mysql_connect('192.168.43.246', 'tesalia', 'proyecto');
 						    mysql_select_db('solar_metric');
 							$now = (new \Datetime())->format('Y-m-d');
 							echo $now;
-							$consulta= "SELECT voltaje, temp, humedad, hora FROM medicion WHERE fecha = '" .$now."'";
+							$consulta= "SELECT voltaje, temp, humedad, hora FROM medicion WHERE fecha = '" .$now. "' ORDER BY hora DESC LIMIT 3";
+							
 							$resultado=mysql_query($consulta, $conexion);
 
 							echo '<table style="border: 2px solid #fff; text-align:center;">';
@@ -108,16 +109,13 @@
 
 							echo '</table>'
 						 ?>
-						 <span class="icon-undo2" style="font-family:'icomoon';"></span>
-						 <button id="btnRegresar">Regresar</button>
+						 
+						 <span id="btnRegresar" class="icon-undo2" style="font-family:'icomoon';"></span>
 					 </div>
 				</section>
 				<section>
 					<a href="http://bit.ly/1gVATKM">Datos sobre radiación solar en Teapa, Tabasco - NASA</a>
 					<a href="http://bit.ly/1OXoi7T">Villahermosa - Estadísticas de radiación - NASA</a>
-				</section>
-				<section>
-					<canvas id="chart" width="400" height="400" style="background-color:white;"></canvas>
 				</section>
 			</section>
 			<section>
@@ -178,7 +176,7 @@
 				</p>
 				
 				<p>
-					<a href="http://www.cnrs.fr/cw/dossiers/dosolaireS/contenu/alternative/alter2_textes.html"target="_blank">
+					<a href="http://www.cnrs.fr/cw/dossiers/dosolaireS/contenu/alternative/alter2_textes.html" target="_blank">
 						http://www.cnrs.fr/cw/dossiers/dosolaireS/contenu/alternative/alter2_textes.html
 					</a>
 				</p>
@@ -194,7 +192,7 @@
 						http://dakar.com.mx/dakar.com.mx/index.php/es/energia-solar/paneles-solares/radiacion-solar
 					</a>
 				</p>
-				<p><a href="http://bit.ly/1gVATKM" title="NASA Surface metereology and Solar Energy: RETScreen Data">http://bit.ly/1gVATKM</a></p>
+				<p><a target="_blank" href="http://bit.ly/1gVATKM" title="NASA Surface metereology and Solar Energy: RETScreen Data">http://bit.ly/1gVATKM</a></p>
 			</section>
 		</div>
 	</div>
@@ -216,5 +214,6 @@
 			transition: 'slide'
 		});
 	</script>
+	<script src="js/main.js"></script>
 </body>
 </html>
