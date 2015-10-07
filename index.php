@@ -78,7 +78,7 @@
 					</nav>
 					<div id="tabla">
 						<h4 style="color:#1ACEE3;">Datos Obtenidos</h4>
-						
+						<!--
 						<?php 
 						    $conexion=mysql_connect('localhost', 'root', '');
 						    //$conexion = mysql_connect('192.168.43.246', 'tesalia', 'proyecto');
@@ -109,7 +109,7 @@
 
 							echo '</table>'
 						 ?>
-						 
+						 -->
 						 <span id="btnRegresar" class="icon-undo2" style="font-family:'icomoon';"></span>
 					 </div>
 				</section>

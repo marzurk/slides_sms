@@ -6,6 +6,7 @@
 	<title>Gráfico</title>
 </head>
 <body>
+	<!--
 	<?php 
 
 		$conexion=mysql_connect('localhost', 'root', '');
@@ -36,9 +37,8 @@
 		}
 
 		echo '</table>'
-
-
 	 ?>
+	 -->
 	<div>
 		<canvas id="chart" width="400" height="400"></canvas>
 	</div>
